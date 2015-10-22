@@ -8,7 +8,7 @@ Bullet::Bullet(glm::vec2 initialDirection, glm::vec2 initialPosition)
         5.0f, 
         initialDirection, 
         initialPosition,
-        glm::vec2(10.0f, 10.0f), 
+        glm::vec2(8.0f, 8.0f), 
         600, 
         Xylem::ResourceManager::getTexture("Textures/Bullet.png"), 
         Xylem::Colour{ 255,255,255,255 },

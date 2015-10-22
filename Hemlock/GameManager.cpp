@@ -60,8 +60,7 @@ void GameManager::gameLoop()
         _camera.update();
 
         _player->update(_inputManager, _bullets, _camera);
-        std::cout << "X - " << _player->getPosition().x << " -- Y - " << _player->getPosition().y << std::endl;
-
+        
         for (size_t i = 0; i < _bullets.size();) {
             if (_bullets[i]->update() == false) {
                 _bullets[i] = _bullets.back();
@@ -146,8 +145,6 @@ void GameManager::processInput()
     if (_inputManager.isKeyPressed(SDLK_e)) {
         _camera.setScale(_camera.getScale() - SCALE_SPEED);
     }
-
-    std::cout << "X - " << _camera.getPosition().x << " -- Y - " << _camera.getPosition().y << std::endl;
 }
 
 void GameManager::drawGame() 

@@ -26,7 +26,7 @@ namespace Xylem
         glm::vec2 _position; ///< Entity location.
         glm::vec2 _size;
         int _lifetime; ///< Entity lifetime.
-        static GLTexture _texture; ///< Entity texture.
+        GLTexture _texture; ///< Entity texture.
         Colour _colour; ///< Entity colour.
         std::string _entityType;
     };

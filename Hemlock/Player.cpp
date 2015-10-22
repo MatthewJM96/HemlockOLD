@@ -11,7 +11,7 @@ Player::Player(glm::vec2 initialPosition)
         1.2f,
         glm::vec2(0.0f, 0.0f),
         initialPosition,
-        glm::vec2(30.0f, 30.0f),
+        glm::vec2(25.0f, 25.0f),
         -1,
         Xylem::ResourceManager::getTexture("Textures/Circle.png"),
         Xylem::Colour{ 16,190,239,255 },
