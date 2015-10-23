@@ -12,6 +12,7 @@ Zombie::Zombie(glm::vec2 initialDirection, glm::vec2 initialPosition, std::vecto
         -1,
         Xylem::ResourceManager::getTexture("Textures/Circle.png"),
         Xylem::Colour{ 68,85,37,255 },
+        1.0f,
         "Zombie"),
     _validTargetEntityTypes(validTargetEntityTypes)
 {

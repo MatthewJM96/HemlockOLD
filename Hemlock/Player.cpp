@@ -15,6 +15,7 @@ Player::Player(glm::vec2 initialPosition)
         -1,
         Xylem::ResourceManager::getTexture("Textures/Circle.png"),
         Xylem::Colour{ 16,190,239,255 },
+        1.0f,
         "Player")
 {
 }

@@ -5,13 +5,14 @@
 
 Bullet::Bullet(glm::vec2 initialDirection, glm::vec2 initialPosition)
     : Entity(
-        5.0f, 
-        initialDirection, 
+        5.0f,
+        initialDirection,
         initialPosition,
-        glm::vec2(8.0f, 8.0f), 
-        600, 
-        Xylem::ResourceManager::getTexture("Textures/Bullet.png"), 
+        glm::vec2(8.0f, 8.0f),
+        600,
+        Xylem::ResourceManager::getTexture("Textures/Bullet.png"),
         Xylem::Colour{ 255,255,255,255 },
+        0.05f,
         "Bullet")
 {
 }

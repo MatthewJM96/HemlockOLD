@@ -71,6 +71,14 @@ void GameManager::gameLoop()
         }
 
         for (size_t i = 0; i < _civilians.size();) {
+            if (_civilians[i]->isColliding(*_player)) {
+                std::cout << "Civilian is colliding with Player." << std::endl;
+            }
+            for (size_t j = 0; j < _bullets.size(); ++j) {
+                if (_civilians[i]->isColliding(*(_bullets[j]))) {
+                    std::cout << "Civilian is colliding with a Bullet." << std::endl;
+                }
+            }
             if (_civilians[i]->update() == false) {
                 _civilians[i] = _civilians.back();
                 _civilians.pop_back();
@@ -194,4 +202,6 @@ void GameManager::drawGame()
 void GameManager::constructLevel(unsigned int levelID)
 {
     _player = new Player(glm::vec2(0.0f, 0.0f));
+
+    _civilians.push_back(new Civilian(glm::vec2(0.0f, 0.0f), glm::vec2(20.0f, 50.0f)));
 }
