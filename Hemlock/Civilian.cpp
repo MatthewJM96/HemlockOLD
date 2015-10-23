@@ -15,7 +15,7 @@ Civilian::Civilian(glm::vec2 initialDirection, glm::vec2 initialPosition)
         initialDirection,
         initialPosition,
         glm::vec2(25.0f, 25.0f),
-        -1,
+        100.0f,
         Xylem::ResourceManager::getTexture("Textures/Circle.png"),
         Xylem::Colour{ 255,174,66,255 },
         1.0f,
@@ -48,5 +48,13 @@ bool Civilian::update()
     // Update movement for motion towards target.
     _position += _direction * _maxSpeed;
 
+    if (_lifetime <= 0) {
+        return false;
+    }
     return true;
+}
+
+void Civilian::changeHealth(float amount)
+{
+    _lifetime += amount;
 }

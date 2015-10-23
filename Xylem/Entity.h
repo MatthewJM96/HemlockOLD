@@ -3,6 +3,7 @@
 #include "SpriteBatch.h"
 #include "GLTexture.h"
 #include "Vertex.h"
+#include "Camera2D.h"
 
 #include <GLM\glm.hpp>
 #include <string>
@@ -22,9 +23,9 @@ namespace Xylem
 
         void setPosition(glm::vec2 position) { _position = position; }
 
-        bool isColliding(Entity& entity);
+        bool collideWithEntity(Entity& entity);
 
-        virtual void draw(SpriteBatch& _spriteBatch); ///< Draws entity.
+        virtual void draw(SpriteBatch& spriteBatch, const Camera2D& camera); ///< Draws entity.
         virtual bool update(); ///< Updates entity.
     protected:
         float _maxSpeed; ///< Entity maximum speed.

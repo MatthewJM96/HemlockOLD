@@ -15,6 +15,7 @@ public:
     ~Zombie();
 
     bool update(const Player* player, const std::vector<Civilian*>& civilianEntities);
+    void changeHealth(float amount);
 private:
     std::vector<std::string> _validTargetEntityTypes;
 };

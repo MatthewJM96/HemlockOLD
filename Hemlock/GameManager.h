@@ -16,6 +16,7 @@
 
 enum class GameState {
     PLAY,
+    EXIT_CONFIRMATION,
     EXIT
 };
 

@@ -52,7 +52,7 @@ void GameManager::initShaders()
 void GameManager::gameLoop()
 {
     static int frameCount = 0;
-    while (_gameState != GameState::EXIT) {
+    while (_gameState != GameState::EXIT && _gameState != GameState::EXIT_CONFIRMATION) {
         _fpsLimiter.begin();
 
         processInput();
@@ -61,24 +61,42 @@ void GameManager::gameLoop()
 
         _player->update(_inputManager, _bullets, _camera);
         
+        // Update bullets.
         for (size_t i = 0; i < _bullets.size();) {
+            // Update bullets.
             if (_bullets[i]->update() == false) {
-                _bullets[i] = _bullets.back();
-                _bullets.pop_back();
-            } else {
-                ++i;
+                goto DESTROY_BULLET;
             }
-        }
-
-        for (size_t i = 0; i < _civilians.size();) {
-            if (_civilians[i]->isColliding(*_player)) {
-                std::cout << "Civilian is colliding with Player." << std::endl;
-            }
-            for (size_t j = 0; j < _bullets.size(); ++j) {
-                if (_civilians[i]->isColliding(*(_bullets[j]))) {
-                    std::cout << "Civilian is colliding with a Bullet." << std::endl;
+            // Collide with zombies.
+            for (size_t j = 0; j < _zombies.size(); ++j) {
+                if (_bullets[i]->collideWithEntity(*(_zombies[j]))) {
+                    _zombies[j]->changeHealth(-1.0f * _bullets[i]->getDamage());
+                    goto DESTROY_BULLET;
                 }
             }
+            // Collide with civilians.
+            for (size_t j = 0; j < _civilians.size(); ++j) {
+                if (_bullets[i]->collideWithEntity(*(_civilians[j]))) {
+                    _civilians[j]->changeHealth(-1.0f * _bullets[i]->getDamage());
+                    goto DESTROY_BULLET;
+                }
+            }
+            ++i;
+            continue;
+        DESTROY_BULLET:
+            _bullets[i] = _bullets.back();
+            _bullets.pop_back();
+        }
+
+        // Handle updating Civilians.
+        for (size_t i = 0; i < _civilians.size();) {
+            // Collide with player.
+            _civilians[i]->collideWithEntity(*_player);
+            // Collide with civilians.
+            for (size_t j = i + 1; j < _civilians.size(); ++j) {
+                _civilians[i]->collideWithEntity(*(_civilians[j]));
+            }
+            // Update civilian location.
             if (_civilians[i]->update() == false) {
                 _civilians[i] = _civilians.back();
                 _civilians.pop_back();
@@ -88,6 +106,28 @@ void GameManager::gameLoop()
         }
 
         for (size_t i = 0; i < _zombies.size();) {
+            // Collide with civilians.
+            for (size_t j = 0; j < _civilians.size();) {
+                if (_zombies[i]->collideWithEntity(*(_civilians[j]))) {
+                    glm::vec2 civilianLocation = _civilians[j]->getPosition();
+                    _civilians[j] = _civilians.back();
+                    _civilians.pop_back();
+                    _zombies.push_back(new Zombie(glm::vec2(0.0f, 0.0f), civilianLocation));
+                }
+                else {
+                    ++j;
+                }
+            }
+            // Collide with player.
+            if (_zombies[i]->collideWithEntity(*_player)) {
+                std::cout << "Game over!" << std::endl;
+                _gameState = GameState::EXIT_CONFIRMATION;
+            }
+            // Collide with zombie.
+            for (size_t j = i + 1; j < _zombies.size(); ++j) {
+                _zombies[i]->collideWithEntity(*(_zombies[j]));
+            }
+            // Update zombie.
             if (_zombies[i]->update(_player, _civilians) == false) {
                 _zombies[i] = _zombies.back();
                 _zombies.pop_back();
@@ -99,15 +139,26 @@ void GameManager::gameLoop()
         drawGame();
 
         _fps = _fpsLimiter.end();
-        if (++frameCount % 600 == 0) {
+        if (++frameCount % 60 == 0) {
             std::cout << _fps << std::endl;
+            int entityCount = 1;
+            entityCount += _zombies.size();
+            entityCount += _civilians.size();
+            entityCount += _bullets.size();
+            std::cout << entityCount << std::endl;
         }
+    }
+
+    if (_gameState == GameState::EXIT_CONFIRMATION) {
+        int temp;
+        std::cout << "Press any key to exit..." << std::endl;
+        std::cin >> temp;
     }
 }
 
 void GameManager::processInput()
 {
-    const float CAMERA_SPEED = 1.2f;
+    const float CAMERA_SPEED = 4.2f;
     const float SCALE_SPEED = 0.1f;
 
     SDL_Event evnt;
@@ -175,18 +226,18 @@ void GameManager::drawGame()
 
     _spriteBatch.begin();
 
-    _player->draw(_spriteBatch);
+    _player->draw(_spriteBatch, _camera);
 
     for (size_t i = 0; i < _bullets.size(); ++i) {
-        _bullets[i]->draw(_spriteBatch);
+        _bullets[i]->draw(_spriteBatch, _camera);
     }
 
     for (size_t i = 0; i < _civilians.size(); ++i) {
-        _civilians[i]->draw(_spriteBatch);
+        _civilians[i]->draw(_spriteBatch, _camera);
     }
 
     for (size_t i = 0; i < _zombies.size(); ++i) {
-        _zombies[i]->draw(_spriteBatch);
+        _zombies[i]->draw(_spriteBatch, _camera);
     }
 
     _spriteBatch.end();
@@ -203,5 +254,9 @@ void GameManager::constructLevel(unsigned int levelID)
 {
     _player = new Player(glm::vec2(0.0f, 0.0f));
 
-    _civilians.push_back(new Civilian(glm::vec2(0.0f, 0.0f), glm::vec2(20.0f, 50.0f)));
+    for (size_t i = 0; i < 50; ++i) {
+        _civilians.push_back(new Civilian(glm::vec2((0.0f + (float)i), (0.0f - (float)i)), glm::vec2((-220.0f + 50.0f * (float)i), (-200.0f + 50.0f * (float)i))));
+    }
+
+    _zombies.push_back(new Zombie(glm::vec2(0.0f), glm::vec2(200.0f, -200.0f)));
 }

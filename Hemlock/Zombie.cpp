@@ -8,8 +8,8 @@ Zombie::Zombie(glm::vec2 initialDirection, glm::vec2 initialPosition, std::vecto
         1.0f,
         initialDirection,
         initialPosition,
-        glm::vec2(5.0f, 5.0f),
-        -1,
+        glm::vec2(25.0f, 25.0f),
+        100.0f,
         Xylem::ResourceManager::getTexture("Textures/Circle.png"),
         Xylem::Colour{ 68,85,37,255 },
         1.0f,
@@ -44,5 +44,13 @@ bool Zombie::update(const Player* player, const std::vector<Civilian*>& civilian
     // Update movement for motion towards target.
     _position += _direction * _maxSpeed;
 
+    if (_lifetime <= 0) {
+        return false;
+    }
     return true;
+}
+
+void Zombie::changeHealth(float amount)
+{
+    _lifetime += amount;
 }

@@ -8,7 +8,7 @@
 
 Player::Player(glm::vec2 initialPosition)
     : Entity(
-        1.2f,
+        4.2f,
         glm::vec2(0.0f, 0.0f),
         initialPosition,
         glm::vec2(25.0f, 25.0f),
@@ -44,7 +44,7 @@ bool Player::update(const Xylem::InputManager & inputManager, std::vector<Bullet
 
         glm::vec2 direction = glm::normalize(mouseCoords - (_position + (_size / 2.0f)));
 
-        bullets.push_back(new Bullet(direction, _position + (_size / 2.0f)));
+        bullets.push_back(new Bullet(direction, _position + (_size / 2.0f), 10.0f));
     }
 
     return true;

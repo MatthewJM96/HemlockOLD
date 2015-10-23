@@ -15,7 +15,8 @@ namespace Xylem
         void update();
 
         glm::vec2 convertScreenToWorld(glm::vec2 screenCoords) const;
-        //glm::vec2 convertWorldToScreen(glm::vec2 worldCoords) const;
+        glm::vec2 convertWorldToScreen(glm::vec2 worldCoords) const;
+        bool isOnScreen(glm::vec2 worldCoords) const;
 
         void setScale(float scale) { _scale = scale; _matrixUpdateRequired = true; }
         void setPosition(glm::vec2& position) { _position = position; _matrixUpdateRequired = true; }

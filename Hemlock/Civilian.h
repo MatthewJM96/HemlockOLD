@@ -9,5 +9,6 @@ public:
     ~Civilian();
 
     bool update();
+    void changeHealth(float amount);
 };
 

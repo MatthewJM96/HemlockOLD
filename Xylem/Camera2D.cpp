@@ -1,5 +1,7 @@
 #include "Camera2D.h"
 
+#include <iostream>
+
 namespace Xylem
 {
     Camera2D::Camera2D()
@@ -34,29 +36,40 @@ namespace Xylem
     
     glm::vec2 Camera2D::convertScreenToWorld(glm::vec2 screenCoords) const
     {
-        // Invert Y direction.
-        screenCoords.y = _screenHeight - screenCoords.y;
+        glm::vec2 worldCoords = screenCoords;
         // Make (0,0) centre of screen.
-        screenCoords -= glm::vec2(_screenWidth / 2, _screenHeight / 2);
+        worldCoords -= glm::vec2(_screenWidth / 2, _screenHeight / 2);
         // Scale the coordinates.
-        screenCoords /= _scale;
+        worldCoords /= _scale;
         // Translate with the camera position.
-        screenCoords += _position;
+        worldCoords += _position;
+
+        return worldCoords;
+    }
+
+    glm::vec2 Camera2D::convertWorldToScreen(glm::vec2 worldCoords) const
+    {
+        glm::vec2 screenCoords = worldCoords;
+        // Translate to negate camera position.
+        screenCoords -= _position;
+        // Scale the coordinates.
+        screenCoords *= _scale;
+        // Make (0,0) centre of screen.
+        screenCoords += glm::vec2(_screenWidth / 2, _screenHeight / 2);
 
         return screenCoords;
     }
 
-    //glm::vec2 Xylem::Camera2D::convertWorldToScreen(glm::vec2 worldCoords) const
-    //{
-    //    // Translate to negate camera position.
-    //    worldCoords -= _position;
-    //    // Scale the coordinates.
-    //    worldCoords *= _scale;
-    //    // Make (0,0) centre of screen.
-    //    worldCoords += glm::vec2(_screenWidth / 2, _screenHeight / 2);
-    //    // Invert Y direction.
-    //    worldCoords.y = worldCoords.y - _screenHeight;
+    bool Camera2D::isOnScreen(glm::vec2 worldCoords) const
+    {
+        glm::vec2 screenCoords = convertWorldToScreen(worldCoords);
+    
+        if (screenCoords.x > 0.0f && screenCoords.x < _screenWidth) {
+            if (screenCoords.y > 0.0f && screenCoords.y < _screenHeight) {
+                return true;
+            }
+        }
 
-    //    return worldCoords;
-    //}
+        return false;
+    }
 }

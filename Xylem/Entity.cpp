@@ -13,7 +13,7 @@ namespace Xylem
     {
     }
 
-    bool Entity::isColliding(Entity& entity)
+    bool Entity::collideWithEntity(Entity& entity)
     {
         float averageSizeA = (_size.x + _size.y) / 2.0f;
         float averageSizeB = (entity.getSize().x + entity.getSize().y) / 2.0f;
@@ -41,12 +41,12 @@ namespace Xylem
         return false;
     }
 
-    void Entity::draw(SpriteBatch& _spriteBatch)
+    void Entity::draw(SpriteBatch& spriteBatch, const Camera2D& camera)
     {
         glm::vec4 uvRectangle(0.0f, 0.0f, 1.0f, 1.0f);
         glm::vec4 destinationRectangle(_position.x, _position.y, _size.x, _size.y);
 
-        _spriteBatch.draw(destinationRectangle, uvRectangle, _texture.id, 0.0f, _colour);
+        spriteBatch.draw(destinationRectangle, uvRectangle, _texture.id, 0.0f, _colour);
     }
 
     bool Entity::update()

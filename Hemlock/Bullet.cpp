@@ -3,7 +3,7 @@
 #include <Xylem\ResourceManager.h>
 #include <Xylem\Vertex.h>
 
-Bullet::Bullet(glm::vec2 initialDirection, glm::vec2 initialPosition)
+Bullet::Bullet(glm::vec2 initialDirection, glm::vec2 initialPosition, float damage)
     : Entity(
         5.0f,
         initialDirection,
@@ -13,7 +13,8 @@ Bullet::Bullet(glm::vec2 initialDirection, glm::vec2 initialPosition)
         Xylem::ResourceManager::getTexture("Textures/Bullet.png"),
         Xylem::Colour{ 255,255,255,255 },
         0.05f,
-        "Bullet")
+        "Bullet"),
+    _damage(damage)
 {
 }
 
