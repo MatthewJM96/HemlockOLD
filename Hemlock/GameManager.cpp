@@ -141,6 +141,7 @@ void GameManager::gameLoop()
         _fps = _fpsLimiter.end();
         if (++frameCount % 60 == 0) {
             std::cout << _fps << std::endl;
+            // Also calculate and display entity count.
             int entityCount = 1;
             entityCount += _zombies.size();
             entityCount += _civilians.size();

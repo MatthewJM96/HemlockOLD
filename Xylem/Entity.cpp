@@ -43,6 +43,10 @@ namespace Xylem
 
     void Entity::draw(SpriteBatch& spriteBatch, const Camera2D& camera)
     {
+        if (!camera.isOnScreen(_position)) {
+            return;
+        }
+
         glm::vec4 uvRectangle(0.0f, 0.0f, 1.0f, 1.0f);
         glm::vec4 destinationRectangle(_position.x, _position.y, _size.x, _size.y);
 
