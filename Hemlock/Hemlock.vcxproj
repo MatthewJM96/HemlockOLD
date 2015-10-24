@@ -127,15 +127,21 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Civilian.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="Gun.cpp" />
+    <ClCompile Include="Level.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Tile.cpp" />
     <ClCompile Include="Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Civilian.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="Gun.h" />
+    <ClInclude Include="Level.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Tile.h" />
     <ClInclude Include="Zombie.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

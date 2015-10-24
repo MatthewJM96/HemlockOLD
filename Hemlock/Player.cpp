@@ -8,7 +8,7 @@
 
 Player::Player(glm::vec2 initialPosition)
     : Entity(
-        4.2f,
+        1.3f,
         glm::vec2(0.0f, 0.0f),
         initialPosition,
         glm::vec2(25.0f, 25.0f),
@@ -41,10 +41,19 @@ bool Player::update(const Xylem::InputManager & inputManager, std::vector<Bullet
     if (inputManager.isKeyPressed(SDL_BUTTON_LEFT)) {
         glm::vec2 mouseCoords = inputManager.getMouseCoords();
         mouseCoords = camera.convertScreenToWorld(mouseCoords);
-
+        
         glm::vec2 direction = glm::normalize(mouseCoords - (_position + (_size / 2.0f)));
-
-        bullets.push_back(new Bullet(direction, _position + (_size / 2.0f), 10.0f));
+        
+        _currentGun->fire(_position, direction);
+    }
+    if (inputManager.isKeyPressed(SDLK_1)) {
+        _currentGun = _guns[0];
+    }
+    if (inputManager.isKeyPressed(SDLK_2)) {
+        _currentGun = _guns[1];
+    }
+    if (inputManager.isKeyPressed(SDLK_3)) {
+        _currentGun = _guns[2];
     }
 
     return true;

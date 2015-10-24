@@ -10,5 +10,8 @@ public:
 
     bool update();
     void changeHealth(float amount);
+private:
+    int _updateCount;
+    int _nextDirUpdate;
 };
 

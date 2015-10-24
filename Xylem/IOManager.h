@@ -9,5 +9,6 @@ namespace Xylem
     {
     public:
         static bool readFileToBuffer(std::string filePath, std::vector<unsigned char>& buffer);
+        static bool readFileLinesToBuffer(std::string filePath, std::vector<std::string>& buffer);
     };
 }

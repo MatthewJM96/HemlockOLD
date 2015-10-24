@@ -8,6 +8,7 @@
 #include <GLM\gtx\vector_angle.hpp>
 
 #include <random>
+#include <iostream>
 
 Civilian::Civilian(glm::vec2 initialDirection, glm::vec2 initialPosition)
     : Entity(
@@ -19,7 +20,9 @@ Civilian::Civilian(glm::vec2 initialDirection, glm::vec2 initialPosition)
         Xylem::ResourceManager::getTexture("Textures/Circle.png"),
         Xylem::Colour{ 255,174,66,255 },
         1.0f,
-        "Civilian")
+        "Civilian"),
+    _updateCount(0),
+    _nextDirUpdate(0)
 {
 }
 
@@ -29,25 +32,26 @@ Civilian::~Civilian()
 
 bool Civilian::update()
 {
-    // Generate a random angle.
-    std::default_random_engine randomGenerator;
-    randomGenerator.seed(SDL_GetTicks());
-    std::uniform_real_distribution<float> distribution(0.0f, 2.0f * glm::pi<float>());
-    float randomAngle = distribution(randomGenerator);
+    // If update count is equal to next direction update count, update civilian direction.
+    if (_updateCount == _nextDirUpdate) {
+        // Generate a random angle.
+        std::default_random_engine randomGenerator;
+        randomGenerator.seed(SDL_GetTicks() * _position.x);
+        std::uniform_real_distribution<float> angDistribution(0.0f, 2.0f * glm::pi<float>());
+        float randomAngle = angDistribution(randomGenerator);
 
-    // Calculate current direction as angle.
-    float currentAngle = glm::angle(_position, glm::vec2(1.0f, 0.0f));
+        // Generate random delay till next dir update.
+        std::uniform_int_distribution<int> nextUpdateDistribution(10, 120);
+        _nextDirUpdate = nextUpdateDistribution(randomGenerator);
 
-    // Calculate a weighted angle including the generated random angle.
-    float weighting = 0.35f;
-    float weightedAngle = (weighting * currentAngle + randomAngle) / (weighting + 1.0f);
-
-    // Convert weighted angle back to a direction unit vector.
-    _direction = glm::vec2(glm::cos(weightedAngle), glm::sin(weightedAngle));
+        _direction = glm::vec2(glm::cos(randomAngle), glm::sin(randomAngle));
+        _updateCount = 0;
+    }
 
     // Update movement for motion towards target.
     _position += _direction * _maxSpeed;
 
+    ++_updateCount;
     if (_lifetime <= 0) {
         return false;
     }

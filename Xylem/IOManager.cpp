@@ -30,4 +30,19 @@ namespace Xylem
 
         return true;
     }
+    bool IOManager::readFileLinesToBuffer(std::string filePath, std::vector<std::string>& buffer)
+    {
+        std::ifstream file(filePath);
+        if (file.fail()) {
+            perror(filePath.c_str());
+            return false;
+        }
+
+        std::string line;
+        while (std::getline(file, line)) {
+            buffer.push_back(line);
+        }
+
+        return true;
+    }
 }

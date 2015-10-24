@@ -1,5 +1,7 @@
 #include "GameManager.h"
 
+#include "Gun.h"
+
 #include <Xylem\Xylem.h>
 #include <Xylem\ResourceManager.h>
 
@@ -7,7 +9,7 @@
 #include <iostream>
 
 GameManager::GameManager()
-    : _screenWidth(1280), _screenHeight(720), _gameState(GameState::PLAY), _fps(60.0f), _maxFPS(90.0f), _player(nullptr)
+    : _screenWidth(1280), _screenHeight(720), _gameState(GameState::PLAY), _fps(60.0f), _maxFPS(90.0f), _player(nullptr), _levelID(1)
 {
     _camera.init(_screenWidth, _screenHeight);
 }
@@ -37,6 +39,8 @@ void GameManager::initSystems()
     initShaders();
 
     _spriteBatch.init();
+
+    _level.init();
 }
 
 void GameManager::initShaders()
@@ -51,16 +55,24 @@ void GameManager::initShaders()
 
 void GameManager::gameLoop()
 {
+    constructLevel(_levelID);
+
     static int frameCount = 0;
     while (_gameState != GameState::EXIT && _gameState != GameState::EXIT_CONFIRMATION) {
         _fpsLimiter.begin();
+
+        if (_zombies.size() == 0) {
+            constructLevel(++_levelID);
+        }
 
         processInput();
 
         _camera.update();
 
         _player->update(_inputManager, _bullets, _camera);
-        
+
+        _level.collideEntity(*_player);
+
         // Update bullets.
         for (size_t i = 0; i < _bullets.size();) {
             // Update bullets.
@@ -159,12 +171,13 @@ void GameManager::gameLoop()
 
 void GameManager::processInput()
 {
-    const float CAMERA_SPEED = 4.2f;
+    const float CAMERA_SPEED = 1.3f;
     const float SCALE_SPEED = 0.1f;
 
     SDL_Event evnt;
     //Will keep looping until there are no more events to process
     while (SDL_PollEvent(&evnt)) {
+        glm::vec2 worldCoords;
         switch (evnt.type) {
             case SDL_QUIT:
                 _gameState = GameState::EXIT;
@@ -225,7 +238,9 @@ void GameManager::drawGame()
     glm::mat4 cameraMatrix = _camera.getCameraMatrix();
     glUniformMatrix4fv(pLocation, 1, false, &(cameraMatrix[0][0]));
 
-    _spriteBatch.begin();
+    _spriteBatch.begin(Xylem::GlyphSortType::FRONT_TO_BACK);
+
+    _level.draw(_spriteBatch, _camera);
 
     _player->draw(_spriteBatch, _camera);
 
@@ -255,8 +270,17 @@ void GameManager::constructLevel(unsigned int levelID)
 {
     _player = new Player(glm::vec2(0.0f, 0.0f));
 
+    _level.clean();
+
+    _level.load(levelID);
+
+    _player->giveGun(new Gun(1, 20.0f, 0.4f, 100.0f, 400, 1, 0.05f, &_bullets)); // Sniper
+    _player->giveGun(new Gun(2, 5.0f, 0.2f, 20.0f, 8, 8, 1.0f, &_bullets)); // Shotgun
+    _player->giveGun(new Gun(5, 5.0f, 0.05f, 10.0f, 12, 1, 0.1f, &_bullets)); // Handgun
+    _player->giveGun(new Gun(2, 5.0f, 20.0f, 0.1f, 8, 12, 1.0f, &_bullets)); // Blowback
+
     for (size_t i = 0; i < 50; ++i) {
-        _civilians.push_back(new Civilian(glm::vec2((0.0f + (float)i), (0.0f - (float)i)), glm::vec2((-220.0f + 50.0f * (float)i), (-200.0f + 50.0f * (float)i))));
+        _civilians.push_back(new Civilian(glm::normalize(glm::vec2(((float)i), (-1.0f * (float)i))), glm::vec2((-220.0f + 50.0f * (float)i), (-200.0f + 50.0f * (float)i))));
     }
 
     _zombies.push_back(new Zombie(glm::vec2(0.0f), glm::vec2(200.0f, -200.0f)));

@@ -1,4 +1,8 @@
 Humans: 100
+Weapon: 1,20,0.4,100,400,1,0.05
+Weapon: 2,5,0.2,20,8,8,1.0
+Weapon: 5,5,0.05,10,12,1,0.1
+Weapon: 2,5,20,0.1,8,12,1.0
 RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
 R..............................................................................................................R
 R.@............................................................................................................R

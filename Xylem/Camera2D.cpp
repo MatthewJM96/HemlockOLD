@@ -36,9 +36,10 @@ namespace Xylem
     
     glm::vec2 Camera2D::convertScreenToWorld(glm::vec2 screenCoords) const
     {
-        glm::vec2 worldCoords = screenCoords;
+        // Invert Y.
+        glm::vec2 worldCoords = glm::vec2(screenCoords.x, -1.0f * screenCoords.y);
         // Make (0,0) centre of screen.
-        worldCoords -= glm::vec2(_screenWidth / 2, _screenHeight / 2);
+        worldCoords -= glm::vec2(_screenWidth / 2.0f, _screenHeight / -2.0f);
         // Scale the coordinates.
         worldCoords /= _scale;
         // Translate with the camera position.
@@ -55,17 +56,19 @@ namespace Xylem
         // Scale the coordinates.
         screenCoords *= _scale;
         // Make (0,0) centre of screen.
-        screenCoords += glm::vec2(_screenWidth / 2, _screenHeight / 2);
+        screenCoords += glm::vec2(_screenWidth / 2.0f, _screenHeight / 2.0f);
+        // Invert Y.
+        screenCoords = glm::vec2(screenCoords.x, -1.0f * screenCoords.y);
 
         return screenCoords;
     }
 
-    bool Camera2D::isOnScreen(glm::vec2 worldCoords) const
+    bool Camera2D::isOnScreen(glm::vec2 worldCoords, glm::vec2 size) const
     {
         glm::vec2 screenCoords = convertWorldToScreen(worldCoords);
     
-        if (screenCoords.x > 0.0f && screenCoords.x < _screenWidth) {
-            if (screenCoords.y > 0.0f && screenCoords.y < _screenHeight) {
+        if (screenCoords.x > (-1.0f * size.x) && screenCoords.x < (_screenWidth + size.x)) {
+            if (screenCoords.y < size.y && screenCoords.y > (-_screenHeight - size.y)) {
                 return true;
             }
         }

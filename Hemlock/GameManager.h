@@ -4,6 +4,7 @@
 #include "Civilian.h"
 #include "Zombie.h"
 #include "Player.h"
+#include "Level.h"
 
 #include <Xylem/Window.h>
 #include <Xylem/GLSLProgram.h>
@@ -61,11 +62,14 @@ private:
 
     Xylem::SpriteBatch _spriteBatch; ///< Sprite batch manager.
 
+    Level _level;
+
     int _screenWidth; ///< Screen Width
     int _screenHeight; ///< Screen Height
     GameState _gameState; ///< Game State
     float _fps; ///< Current FPS
     float _maxFPS; ///< Target Maximum FPS
+    int _levelID; ///< Current level ID.
 
     /// Entity Lists
     Player* _player; ///< Player Entity
