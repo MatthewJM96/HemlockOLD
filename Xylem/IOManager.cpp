@@ -6,6 +6,7 @@
 
 namespace Xylem
 {
+    /// Read given file to a buffer array.
     bool IOManager::readFileToBuffer(std::string filePath, std::vector<unsigned char>& buffer)
     {
         std::ifstream file(filePath, std::ios::binary);
@@ -30,6 +31,8 @@ namespace Xylem
 
         return true;
     }
+
+    /// Read given file in to a vector of strings, each line corresponding to one string.
     bool IOManager::readFileLinesToBuffer(std::string filePath, std::vector<std::string>& buffer)
     {
         std::ifstream file(filePath);

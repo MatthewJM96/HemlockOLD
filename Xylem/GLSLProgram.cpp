@@ -8,7 +8,10 @@
 namespace Xylem
 {
     GLSLProgram::GLSLProgram()
-        : _numberOfAttributes(0), _programID(0), _vertexShaderID(0), _fragmentShaderID(0)
+        : _numberOfAttributes(0),
+        _programID(0),
+        _vertexShaderID(0),
+        _fragmentShaderID(0)
     {
     }
 
@@ -16,6 +19,7 @@ namespace Xylem
     {
     }
 
+    /// Compile the GLSL Shaders.
     void GLSLProgram::compileShaders(const std::string & vertexShaderFilePath, const std::string & fragmentShaderFilePath)
     {
         _programID = glCreateProgram();
@@ -34,6 +38,7 @@ namespace Xylem
         compileShader(_fragmentShaderID, fragmentShaderFilePath);
     }
 
+    /// Link the shaders to the shader program.
     void GLSLProgram::linkShaders()
     {
         glAttachShader(_programID, _vertexShaderID);
@@ -70,11 +75,13 @@ namespace Xylem
         glDeleteShader(_fragmentShaderID);
     }
 
+    /// Adds an attribute to the shader program.
     void GLSLProgram::addAttribute(const std::string attributeName)
     {
         glBindAttribLocation(_programID, _numberOfAttributes++, attributeName.c_str());
     }
 
+    /// Gets the location of a uniform.
     GLuint GLSLProgram::getUniformLocation(const std::string & uniformName)
     {
         GLuint location = glGetUniformLocation(_programID, uniformName.c_str());
@@ -84,6 +91,7 @@ namespace Xylem
         return location;
     }
 
+    /// Uses the shader program, enabling the associated vertex attributes.
     void GLSLProgram::use()
     {
         glUseProgram(_programID);
@@ -92,6 +100,7 @@ namespace Xylem
         }
     }
 
+    /// Unues the shader program, disabling the associated vertex attributes.
     void GLSLProgram::unuse()
     {
         glUseProgram(0);
@@ -100,6 +109,7 @@ namespace Xylem
         }
     }
 
+    /// Compiles an individual shader.
     void GLSLProgram::compileShader(GLuint shaderID, const std::string & shaderFilePath)
     {
         std::ifstream file(shaderFilePath);

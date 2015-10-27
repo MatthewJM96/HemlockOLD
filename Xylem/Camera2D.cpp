@@ -5,7 +5,13 @@
 namespace Xylem
 {
     Camera2D::Camera2D()
-        : _screenWidth(1280), _screenHeight(720), _matrixUpdateRequired(true), _scale(1.0f), _position(0.0f, 0.0f), _orthographicMatrix(1.0f), _cameraMatrix(1.0f)
+        : _screenWidth(1280),
+        _screenHeight(720),
+        _matrixUpdateRequired(true),
+        _scale(1.0f),
+        _position(0.0f, 0.0f),
+        _orthographicMatrix(1.0f),
+        _cameraMatrix(1.0f)
     {
     }
 
@@ -13,6 +19,7 @@ namespace Xylem
     {
     }
 
+    /// Initialise the camera.
     void Camera2D::init(int screenWidth, int screenHeight)
     {
         _screenWidth = screenWidth;
@@ -21,12 +28,15 @@ namespace Xylem
         _orthographicMatrix = glm::ortho(0.0f, (float)_screenWidth, 0.0f, (float)_screenHeight);
     }
 
+    /// Updates the camera if required. Generating a new camera matrix.
     void Camera2D::update()
     {
         if (_matrixUpdateRequired) {
-            glm::vec3 translate(-_position.x + _screenWidth / 2, -_position.y + _screenHeight / 2, 0.0f);
+            // Translates the camera.
+            glm::vec3 translate(-_position.x + _screenWidth / 2.0f, -_position.y + _screenHeight / 2, 0.0f);
             _cameraMatrix = glm::translate(_orthographicMatrix, translate);
 
+            // Scales the camera.
             glm::vec3 scale(_scale, _scale, 0.0f);
             _cameraMatrix = glm::scale(glm::mat4(1.0f), scale) * _cameraMatrix;
 
@@ -34,10 +44,11 @@ namespace Xylem
         }
     }
     
+    /// Converts screen coordinates to world coordinates.
     glm::vec2 Camera2D::convertScreenToWorld(glm::vec2 screenCoords) const
     {
         // Invert Y.
-        glm::vec2 worldCoords = glm::vec2(screenCoords.x, -1.0f * screenCoords.y);
+        glm::vec2 worldCoords = glm::vec2(screenCoords.x, _screenHeight - screenCoords.y);
         // Make (0,0) centre of screen.
         worldCoords -= glm::vec2(_screenWidth / 2.0f, _screenHeight / -2.0f);
         // Scale the coordinates.
@@ -48,6 +59,7 @@ namespace Xylem
         return worldCoords;
     }
 
+    /// Converts world coordinates to screen coordinates.
     glm::vec2 Camera2D::convertWorldToScreen(glm::vec2 worldCoords) const
     {
         glm::vec2 screenCoords = worldCoords;
@@ -58,11 +70,12 @@ namespace Xylem
         // Make (0,0) centre of screen.
         screenCoords += glm::vec2(_screenWidth / 2.0f, _screenHeight / 2.0f);
         // Invert Y.
-        screenCoords = glm::vec2(screenCoords.x, -1.0f * screenCoords.y);
+        screenCoords = glm::vec2(screenCoords.x, -1.0f * (screenCoords.y - _screenHeight));
 
         return screenCoords;
     }
 
+    /// Determines if a coordinate is on screen.
     bool Camera2D::isOnScreen(glm::vec2 worldCoords, glm::vec2 size) const
     {
         glm::vec2 screenCoords = convertWorldToScreen(worldCoords);

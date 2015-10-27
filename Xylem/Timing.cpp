@@ -8,21 +8,25 @@ namespace Xylem
     {
     }
 
+    /// Initialise the FPS limiter.
     void FpsLimiter::init(float maxFps)
     {
         setMaxFps(maxFps);
     }
 
+    /// Sets a new maximum FPS.
     void FpsLimiter::setMaxFps(float maxFps)
     {
         _maxFPS = maxFps;
     }
 
+    /// Begins a timing round.
     void FpsLimiter::begin()
     {
         _startTicks = SDL_GetTicks();
     }
 
+    /// Ends a timing round and delays processes appropriately to limit to target FPS.
     float FpsLimiter::end()
     {
         calculateFps();
@@ -35,6 +39,7 @@ namespace Xylem
         return _fps;
     }
 
+    /// Calculates the current FPS using sampling.
     void FpsLimiter::calculateFps()
     {
         static const int NUM_SAMPLES = 10;

@@ -5,14 +5,21 @@
 namespace Xylem
 {
     Entity::Entity(float maxSpeed, glm::vec2 initialDirection, glm::vec2 initialPosition, glm::vec2 size, int lifetime, GLTexture texture, Colour colour, float mass, std::string entityType)
-        : _maxSpeed(maxSpeed), _direction(initialDirection), _position(initialPosition), _size(size), _lifetime(lifetime), _texture(texture), _colour(colour), _mass(mass), _entityType(entityType)
+        : _maxSpeed(maxSpeed),
+        _direction(initialDirection),
+        _position(initialPosition),
+        _size(size), _lifetime(lifetime),
+        _texture(texture), _colour(colour),
+        _mass(mass),
+        _entityType(entityType)
     {
     }
 
     Entity::~Entity()
     {
     }
-
+    
+    /// Collides the entity instance with another, given entity.
     bool Entity::collideWithEntity(Entity& entity)
     {
         float averageSizeA = (_size.x + _size.y) / 2.0f;
@@ -41,6 +48,7 @@ namespace Xylem
         return false;
     }
 
+    /// Draws the entity into the given sprite batch.
     void Entity::draw(SpriteBatch& spriteBatch, const Camera2D& camera)
     {
         if (!camera.isOnScreen(_position, _size)) {
@@ -53,6 +61,7 @@ namespace Xylem
         spriteBatch.draw(destinationRectangle, uvRectangle, _texture.id, 1.0f, _colour);
     }
 
+    /// Default entity update method.
     bool Entity::update()
     {
         _position += _direction * _maxSpeed;

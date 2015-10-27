@@ -5,7 +5,8 @@
 namespace Xylem
 {
     SpriteBatch::SpriteBatch()
-        : _vbo(0), _vao(0)
+        : _vbo(0),
+        _vao(0)
     {
     }
 
@@ -13,11 +14,13 @@ namespace Xylem
     {
     }
 
+    /// Initialises the sprite batch.
     void SpriteBatch::init()
     {
         createVertexArray();
     }
 
+    /// Prepares the sprite batch for drawing.
     void SpriteBatch::begin(GlyphSortType sortType/*= GlyphSortType::TEXTURE*/)
     {
         _sortType = sortType;
@@ -28,12 +31,14 @@ namespace Xylem
         _glyphs.clear();
     }
 
+    /// Ends the sprite batch's draw mode.
     void SpriteBatch::end()
     {
         sortGlyphs();
         createRenderBatches();
     }
 
+    /// Prepares a sprite by drawing in memory.
     void SpriteBatch::draw(const glm::vec4 & destinationRectangle, const glm::vec4 & uvRectangle, GLuint texture, float depth, const Colour & colour)
     {
         Glyph* newGlyph = new Glyph();
@@ -59,6 +64,7 @@ namespace Xylem
         _glyphs.push_back(newGlyph);
     }
 
+    /// Renders all the drawn sprites.
     void SpriteBatch::renderBatch()
     {
         glBindVertexArray(_vao);
@@ -72,6 +78,7 @@ namespace Xylem
         glBindVertexArray(0);
     }
 
+    /// Creates the render batches.
     void SpriteBatch::createRenderBatches()
     {
         std::vector<Vertex> vertices;
@@ -117,6 +124,7 @@ namespace Xylem
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
+    /// Creates a vertex array.
     void SpriteBatch::createVertexArray()
     {
         if (_vao == 0) {
@@ -140,6 +148,7 @@ namespace Xylem
         glBindVertexArray(0);
     }
 
+    /// Sorts the glyphs in method specified in the begin function.
     void SpriteBatch::sortGlyphs()
     {
         switch (_sortType) {
@@ -155,16 +164,19 @@ namespace Xylem
         }
     }
 
+    /// Compares glyphs front to back.
     bool SpriteBatch::compareFrontToBack(Glyph * a, Glyph * b)
     {
         return (a->depth < b->depth);
     }
 
+    /// Compares glyphs back to front.
     bool SpriteBatch::compareBackToFront(Glyph * a, Glyph * b)
     {
         return (a->depth > b->depth);
     }
 
+    /// Compares glyphs by texture type.
     bool SpriteBatch::compareTexture(Glyph * a, Glyph * b)
     {
         return (a->texture < b->texture);

@@ -62,7 +62,7 @@ void GameManager::gameLoop()
         _fpsLimiter.begin();
 
         if (_zombies.size() == 0) {
-            constructLevel(++_levelID);
+            //constructLevel(++_levelID);
         }
 
         processInput();

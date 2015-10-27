@@ -2,8 +2,6 @@
 
 #include "ImageLoader.h"
 
-#include <iostream>
-
 namespace Xylem
 {
     TextureCache::TextureCache()
@@ -14,9 +12,9 @@ namespace Xylem
     {
     }
 
+    /// Gets a texture with given texture path from cache if already loaded, otherwise loads it.
     GLTexture TextureCache::getTexture(std::string texturePath)
     {
-        // auto == std::map<std::string, GLTexture>::iterator
         auto it = _textureMap.find(texturePath);
 
         if (it == _textureMap.end()) {
@@ -24,11 +22,9 @@ namespace Xylem
 
             _textureMap.insert(make_pair(texturePath, newTexture));
 
-            //std::cout << "Loaded cached texture.\n" << std::endl;
             return newTexture;
         }
 
-        //std::cout << "Loaded texture.\n" << std::endl;
         return it->second;
     }
 }

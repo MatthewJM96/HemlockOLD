@@ -14,8 +14,8 @@ namespace Xylem
 
         void compileShaders(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath);
         void linkShaders();
-        void addAttribute(const std::string attributeName);
 
+        void addAttribute(const std::string attributeName);
         GLuint getUniformLocation(const std::string& uniformName);
 
         void use();

@@ -12,6 +12,7 @@ namespace Xylem
     {
     }
 
+    /// Creates a window instance.
     int Window::create(std::string windowName, int screenWidth, int screenHeight, unsigned int flags)
     {
         Uint32 sdlFlags = SDL_WINDOW_OPENGL;
@@ -32,7 +33,7 @@ namespace Xylem
             ErrorManager::fatalError("SDL Window could not be created!");
         }
 
-        // Initiliase the SDL GL Context.
+        // Initiliase the SDL OpenGL Context.
         SDL_GLContext glContext = SDL_GL_CreateContext(_sdlWindow);
         if (glContext == nullptr) {
             ErrorManager::fatalError("SDL_GL context could not be created!");
@@ -59,6 +60,7 @@ namespace Xylem
         return 0;
     }
 
+    /// Swaps window buffer.
     void Window::swapBuffer()
     {
         SDL_GL_SwapWindow(_sdlWindow);

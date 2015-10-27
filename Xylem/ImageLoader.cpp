@@ -6,6 +6,7 @@
 
 namespace Xylem
 {
+    /// Loads a PNG and creates a GLTexture for it.
     GLTexture ImageLoader::loadPNG(std::string filePath)
     {
         GLTexture texture = {};

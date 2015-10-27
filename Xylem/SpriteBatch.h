@@ -32,7 +32,9 @@ namespace Xylem
     {
     public:
         RenderBatch(GLuint offset_, GLuint vertexCount_, GLuint texture_)
-            : offset(offset_), vertexCount(vertexCount_), texture(texture_)
+            : offset(offset_),
+            vertexCount(vertexCount_),
+            texture(texture_)
         {}
         GLuint offset;
         GLuint vertexCount;
