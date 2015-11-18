@@ -8,15 +8,15 @@
 class Tile
 {
 public:
-    Tile(char id, Xylem::GLTexture glTexture, Xylem::Colour colour = { 255, 255, 255, 255 });
+    Tile(char id, Xylem::GLTexture glTexture, Xylem::ColourRGBA8 colour = { 255, 255, 255, 255 });
     ~Tile();
 
     char getTileID() const { return _id; }
     GLuint getTextureID() const { return _texture.id; }
-    Xylem::Colour getColour() const { return _colour; }
+    Xylem::ColourRGBA8 getColour() const { return _colour; }
 private:
     char _id;
     Xylem::GLTexture _texture;
-    Xylem::Colour _colour;
+    Xylem::ColourRGBA8 _colour;
 };
 

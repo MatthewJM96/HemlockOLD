@@ -18,7 +18,7 @@ Civilian::Civilian(glm::vec2 initialDirection, glm::vec2 initialPosition)
         glm::vec2(25.0f, 25.0f),
         100.0f,
         Xylem::ResourceManager::getTexture("Textures/Circle.png"),
-        Xylem::Colour{ 255,174,66,255 },
+        Xylem::ColourRGBA8{ 255,174,66,255 },
         1.0f,
         "Civilian"),
     _updateCount(0),
@@ -30,7 +30,7 @@ Civilian::~Civilian()
 {
 }
 
-bool Civilian::update()
+bool Civilian::update(float deltaTime)
 {
     // If update count is equal to next direction update count, update civilian direction.
     if (_updateCount == _nextDirUpdate) {
@@ -49,7 +49,7 @@ bool Civilian::update()
     }
 
     // Update movement for motion towards target.
-    _position += _direction * _maxSpeed;
+    _position += _direction * _maxSpeed * deltaTime;
 
     ++_updateCount;
     if (_lifetime <= 0) {

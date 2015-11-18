@@ -52,7 +52,7 @@ namespace Xylem
         void begin(GlyphSortType sortType = GlyphSortType::TEXTURE);
         void end();
 
-        void draw(const glm::vec4& destinationRectangle, const glm::vec4& uvRectangle, GLuint texture, float depth, const Colour& colour);
+        void draw(const glm::vec4& destinationRectangle, const glm::vec4& uvRectangle, GLuint texture, float depth, const ColourRGBA8& colour);
 
         void renderBatch();
     private:

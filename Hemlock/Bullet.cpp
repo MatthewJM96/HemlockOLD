@@ -11,7 +11,7 @@ Bullet::Bullet(float speed, glm::vec2 initialDirection, glm::vec2 initialPositio
         glm::vec2(7.0f, 7.0f),
         lifetime,
         Xylem::ResourceManager::getTexture("Textures/Bullet.png"),
-        Xylem::Colour{ 255,255,255,255 },
+        Xylem::ColourRGBA8{ 255,255,255,255 },
         mass,
         "Bullet"),
     _damage(damage)

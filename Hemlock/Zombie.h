@@ -11,11 +11,13 @@
 class Zombie : public Xylem::Entity
 {
 public:
-    Zombie(glm::vec2 initialDirection, glm::vec2 initialPosition, std::vector<std::string> validTargetEntityTypes = { "Civilian", "Player" });
+    Zombie(glm::vec2 initialDirection, glm::vec2 initialPosition, const Player* player, const std::vector<Civilian*>* civilianEntities, std::vector<std::string> validTargetEntityTypes = { "Civilian", "Player" });
     ~Zombie();
 
-    bool update(const Player* player, const std::vector<Civilian*>& civilianEntities);
+    bool update(float DeltaTime) override;
     void changeHealth(float amount);
 private:
     std::vector<std::string> _validTargetEntityTypes;
+    const std::vector<Civilian*>* _civilianEntities;
+    const Player* _player;
 };

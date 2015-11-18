@@ -39,7 +39,7 @@ namespace Xylem
     }
 
     /// Prepares a sprite by drawing in memory.
-    void SpriteBatch::draw(const glm::vec4 & destinationRectangle, const glm::vec4 & uvRectangle, GLuint texture, float depth, const Colour & colour)
+    void SpriteBatch::draw(const glm::vec4 & destinationRectangle, const glm::vec4 & uvRectangle, GLuint texture, float depth, const ColourRGBA8 & colour)
     {
         Glyph* newGlyph = new Glyph();
         newGlyph->texture = texture;

@@ -40,6 +40,12 @@ private:
     /// Main game loop for the program
     void gameLoop();
 
+    /// Updates various entities.
+    void updatePlayer(float deltaTime);
+    void updateBullets(float deltaTime);
+    void updateCivilians(float deltaTime);
+    void updateZombies(float deltaTime);
+
     /// Handles input processing
     void processInput();
 

@@ -4,7 +4,7 @@
 
 namespace Xylem
 {
-    Entity::Entity(float maxSpeed, glm::vec2 initialDirection, glm::vec2 initialPosition, glm::vec2 size, int lifetime, GLTexture texture, Colour colour, float mass, std::string entityType)
+    Entity::Entity(float maxSpeed, glm::vec2 initialDirection, glm::vec2 initialPosition, glm::vec2 size, int lifetime, GLTexture texture, ColourRGBA8 colour, float mass, std::string entityType)
         : _maxSpeed(maxSpeed),
         _direction(initialDirection),
         _position(initialPosition),
@@ -62,9 +62,9 @@ namespace Xylem
     }
 
     /// Default entity update method.
-    bool Entity::update()
+    bool Entity::update(float deltaTime)
     {
-        _position += _direction * _maxSpeed;
+        _position += _direction * _maxSpeed * deltaTime;
 
         if (_lifetime > 0 && --_lifetime == 0) {
             return false;

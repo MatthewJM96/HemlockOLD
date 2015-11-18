@@ -6,7 +6,9 @@
 #include <SDL\SDL.h>
 #include <GLM\glm.hpp>
 
-Player::Player(glm::vec2 initialPosition)
+#include <iostream>
+
+Player::Player(glm::vec2 initialPosition, const Xylem::InputManager* inputManager, const Xylem::Camera2D* camera)
     : Entity(
         1.3f,
         glm::vec2(0.0f, 0.0f),
@@ -14,9 +16,12 @@ Player::Player(glm::vec2 initialPosition)
         glm::vec2(25.0f, 25.0f),
         -1,
         Xylem::ResourceManager::getTexture("Textures/Circle.png"),
-        Xylem::Colour{ 16,190,239,255 },
+        Xylem::ColourRGBA8{ 16,190,239,255 },
         1.0f,
-        "Player")
+        "Player"),
+    _inputManager(inputManager),
+    _camera(camera),
+    _currentGunIndex(0)
 {
 }
 
@@ -24,36 +29,49 @@ Player::~Player()
 {
 }
 
-bool Player::update(const Xylem::InputManager & inputManager, std::vector<Bullet*>& bullets, const Xylem::Camera2D camera)
+bool Player::update(float deltaTime)
 {
-    if (inputManager.isKeyPressed(SDLK_w)) {
-        _position += glm::vec2(0.0f, 1.0f) * _maxSpeed;
+    if (_inputManager->isKeyDown(SDLK_w)) {
+        _position += glm::vec2(0.0f, 1.0f) * _maxSpeed * deltaTime;
     }
-    if (inputManager.isKeyPressed(SDLK_s)) {
-        _position += glm::vec2(0.0f, -1.0f) * _maxSpeed;
+    if (_inputManager->isKeyDown(SDLK_s)) {
+        _position += glm::vec2(0.0f, -1.0f) * _maxSpeed * deltaTime;
     }
-    if (inputManager.isKeyPressed(SDLK_a)) {
-        _position += glm::vec2(-1.0f, 0.0f) * _maxSpeed;
+    if (_inputManager->isKeyDown(SDLK_a)) {
+        _position += glm::vec2(-1.0f, 0.0f) * _maxSpeed * deltaTime;
     }
-    if (inputManager.isKeyPressed(SDLK_d)) {
-        _position += glm::vec2(1.0f, 0.0f) * _maxSpeed;
+    if (_inputManager->isKeyDown(SDLK_d)) {
+        _position += glm::vec2(1.0f, 0.0f) * _maxSpeed * deltaTime;
     }
-    if (inputManager.isKeyPressed(SDL_BUTTON_LEFT)) {
-        glm::vec2 mouseCoords = inputManager.getMouseCoords();
-        mouseCoords = camera.convertScreenToWorld(mouseCoords);
+
+    if (_inputManager->isKeyDown(SDL_BUTTON_LEFT)) {
+        glm::vec2 mouseCoords = _inputManager->getMouseCoords();
+        mouseCoords = _camera->convertScreenToWorld(mouseCoords);
         
         glm::vec2 direction = glm::normalize(mouseCoords - (_position + (_size / 2.0f)));
         
-        _currentGun->fire(_position, direction);
+        _guns[_currentGunIndex]->fire(_position, direction);
     }
-    if (inputManager.isKeyPressed(SDLK_1)) {
-        _currentGun = _guns[0];
+
+    if (_inputManager->isKeyPressed(SDLK_1)) {
+        _currentGunIndex = 0;
     }
-    if (inputManager.isKeyPressed(SDLK_2)) {
-        _currentGun = _guns[1];
+    if (_inputManager->isKeyPressed(SDLK_2)) {
+        _currentGunIndex = 1;
     }
-    if (inputManager.isKeyPressed(SDLK_3)) {
-        _currentGun = _guns[2];
+    if (_inputManager->isKeyPressed(SDLK_3)) {
+        _currentGunIndex = 2;
+    }
+    if (_inputManager->isKeyPressed(SDLK_4)) {
+        _currentGunIndex = 3;
+    }
+
+    if (_inputManager->isKeyPressed(SDLK_LEFT)) {
+        --_currentGunIndex;
+    }
+
+    if (_inputManager->isKeyPressed(SDLK_RIGHT)) {
+        ++_currentGunIndex;
     }
 
     return true;

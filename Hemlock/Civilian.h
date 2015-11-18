@@ -8,7 +8,7 @@ public:
     Civilian(glm::vec2 initialDirection, glm::vec2 initialPosition);
     ~Civilian();
 
-    bool update();
+    bool update(float deltaTime) override;
     void changeHealth(float amount);
 private:
     int _updateCount;
